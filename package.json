@@ -1,0 +1,29 @@
+{
+  "name": "game-case",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "vite build && wrangler pages dev --port 8788",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "oxlint src lib functions",
+    "social": "node social-src/render.mjs",
+    "deploy": "vite build && wrangler pages deploy dist --project-name spinagame"
+  },
+  "dependencies": {
+    "lucide-react": "^0.469.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "gifenc": "^1.0.3",
+    "oxlint": "^0.15.0",
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.12.0",
+    "vite": "^6.0.7",
+    "wrangler": "^3.99.0"
+  }
+}

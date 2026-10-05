@@ -1,0 +1,345 @@
+<!doctype html>
+<!--
+  Source for the link-preview card (public/social/card.png and card.gif).
+  Rendered with headless Chrome by social-src/render.mjs (`npm run social`).
+  window.setProgress(0..1) sets how far the reel has spun, so the GIF is just
+  this page captured at successive values.
+-->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@500;600;700&display=block"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+            }
+
+            html,
+            body {
+                width: 1200px;
+                height: 630px;
+                overflow: hidden;
+                background: #07090d;
+            }
+
+            .card {
+                position: relative;
+                width: 1200px;
+                height: 630px;
+                overflow: hidden;
+                font-family: Inter, sans-serif;
+                color: #e8ecf2;
+                background:
+                    radial-gradient(700px 340px at 50% 47%, rgba(228, 174, 57, 0.22), transparent 70%),
+                    radial-gradient(1200px 600px at 50% 120%, rgba(75, 105, 255, 0.12), transparent 60%),
+                    linear-gradient(180deg, #0c1017 0%, #07090d 100%);
+            }
+
+            /* Faint diagonal light streaks, like the case-opening backdrop. */
+            .streaks {
+                position: absolute;
+                inset: -200px;
+                background: repeating-linear-gradient(
+                    115deg,
+                    transparent 0 120px,
+                    rgba(228, 174, 57, 0.035) 120px 122px,
+                    transparent 122px 260px
+                );
+            }
+
+            .grain {
+                position: absolute;
+                inset: 0;
+                opacity: 0.08;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            }
+
+            .top {
+                position: absolute;
+                top: 46px;
+                left: 0;
+                right: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 14px;
+            }
+
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                font-family: 'Barlow Condensed', sans-serif;
+                font-size: 44px;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                line-height: 1;
+            }
+
+            .brand b {
+                color: #e4ae39;
+                font-weight: 800;
+            }
+
+            .pill {
+                padding: 6px 14px;
+                border: 1px solid rgba(228, 174, 57, 0.35);
+                border-radius: 999px;
+                background: rgba(228, 174, 57, 0.08);
+                color: #f3c35a;
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+            }
+
+            /* ── Reel ── */
+
+            .reel {
+                position: absolute;
+                top: 188px;
+                left: 0;
+                right: 0;
+                height: 214px;
+                border-top: 1px solid rgba(255, 255, 255, 0.06);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+                background: linear-gradient(180deg, rgba(18, 23, 32, 0.9), rgba(9, 12, 17, 0.9));
+                box-shadow:
+                    inset 0 0 80px rgba(0, 0, 0, 0.7),
+                    0 30px 80px rgba(0, 0, 0, 0.5);
+                overflow: hidden;
+            }
+
+            .reel::before,
+            .reel::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 260px;
+                z-index: 2;
+            }
+
+            .reel::before {
+                left: 0;
+                background: linear-gradient(90deg, #07090d 10%, transparent);
+            }
+
+            .reel::after {
+                right: 0;
+                background: linear-gradient(270deg, #07090d 10%, transparent);
+            }
+
+            .strip {
+                position: absolute;
+                top: 22px;
+                left: 0;
+                display: flex;
+                gap: 12px;
+            }
+
+            .item {
+                flex: none;
+                width: 300px;
+                border-radius: 8px;
+                overflow: hidden;
+                background:
+                    radial-gradient(120% 90% at 50% 130%, color-mix(in srgb, var(--tier) 55%, transparent), transparent 70%),
+                    #1a2029;
+                border-bottom: 5px solid var(--tier);
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+            }
+
+            .item img {
+                display: block;
+                width: 300px;
+                height: 140px;
+                object-fit: cover;
+            }
+
+            .item span {
+                display: block;
+                padding: 9px 12px 10px;
+                font-size: 16px;
+                font-weight: 700;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .item.win {
+                box-shadow:
+                    0 0 0 2px var(--tier),
+                    0 0 50px color-mix(in srgb, var(--tier) 60%, transparent);
+            }
+
+            .marker {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 599px;
+                width: 3px;
+                z-index: 3;
+                background: #e4ae39;
+                box-shadow:
+                    0 0 18px #e4ae39,
+                    0 0 40px rgba(228, 174, 57, 0.6);
+            }
+
+            .marker::before,
+            .marker::after {
+                content: '';
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                border: 12px solid transparent;
+            }
+
+            .marker::before {
+                top: 0;
+                border-top-color: #e4ae39;
+            }
+
+            .marker::after {
+                bottom: 0;
+                border-bottom-color: #e4ae39;
+            }
+
+            /* ── Headline ── */
+
+            .bottom {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 52px;
+                text-align: center;
+            }
+
+            h1 {
+                font-family: 'Barlow Condensed', sans-serif;
+                font-size: 76px;
+                font-weight: 800;
+                line-height: 0.95;
+                letter-spacing: 0.01em;
+                text-transform: uppercase;
+                text-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+            }
+
+            h1 em {
+                font-style: normal;
+                background: linear-gradient(180deg, #ffd377, #e4ae39 60%, #c48f22);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+            }
+
+            .sub {
+                margin-top: 14px;
+                color: #8a94a6;
+                font-size: 20px;
+                font-weight: 500;
+            }
+
+            .sub b {
+                color: #e8ecf2;
+                font-weight: 600;
+            }
+
+            .url {
+                position: absolute;
+                right: 40px;
+                top: 40px;
+                color: #5c6577;
+                font-size: 15px;
+                font-weight: 600;
+                letter-spacing: 0.04em;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="streaks"></div>
+            <div class="grain"></div>
+
+            <div class="top">
+                <div class="brand">
+                    <svg width="44" height="44" viewBox="0 0 32 32" aria-hidden="true">
+                        <rect x="3" y="9" width="26" height="18" rx="3" fill="#1b212b" stroke="#e4ae39" stroke-width="2" />
+                        <path d="M3 14h26" stroke="#e4ae39" stroke-width="2" />
+                        <rect x="13" y="11" width="6" height="6" rx="1" fill="#e4ae39" />
+                        <path d="M8 9l3-4h10l3 4" fill="none" stroke="#e4ae39" stroke-width="2" stroke-linejoin="round" />
+                    </svg>
+                    <span>GAME<b>CASE</b></span>
+                </div>
+                <div class="pill">Steam library case opening</div>
+            </div>
+
+            <div class="reel">
+                <div class="strip" id="strip"></div>
+                <div class="marker"></div>
+            </div>
+
+            <div class="bottom">
+                <h1>Can't pick a game? <em>Open the case.</em></h1>
+                <p class="sub">Spin your Steam library CS2-style, or spin with friends for <b>games you all own</b>.</p>
+            </div>
+        </div>
+
+        <script>
+            const T = {
+                gold: '#e4ae39',
+                covert: '#eb4b4b',
+                classified: '#d32ce6',
+                restricted: '#8847ff',
+                milspec: '#4b69ff',
+            };
+            // The winner (index WIN) is the gold one, so the reel lands on a ★ drop.
+            const GAMES = [
+                [413150, 'Stardew Valley', T.milspec],
+                [1091500, 'Cyberpunk 2077', T.classified],
+                [105600, 'Terraria', T.milspec],
+                [1145360, 'Hades', T.restricted],
+                [620, 'Portal 2', T.restricted],
+                [252490, 'Rust', T.covert],
+                [730, 'Counter-Strike 2', T.milspec],
+                [367520, 'Hollow Knight', T.covert],
+                [1966720, 'Lethal Company', T.restricted],
+                [892970, 'Valheim', T.classified],
+                [1086940, "Baldur's Gate 3", T.covert],
+                [1245620, 'ELDEN RING', T.gold],
+                [646570, 'Slay the Spire', T.restricted],
+                [1794680, 'Vampire Survivors', T.classified],
+                [553850, 'HELLDIVERS 2', T.covert],
+                [739630, 'Phasmophobia', T.restricted],
+            ];
+            const WIN = 11;
+            const W = 312; // card width + gap
+
+            const strip = document.getElementById('strip');
+            GAMES.forEach(([appid, name, tier], i) => {
+                const el = document.createElement('div');
+                el.className = 'item' + (i === WIN ? ' win' : '');
+                el.style.setProperty('--tier', tier);
+                el.innerHTML = `<img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/${appid}/header.jpg"><span>${name}</span>`;
+                strip.appendChild(el);
+            });
+
+            // p = 0 → strip at rest near the start; p = 1 → winner centred under
+            // the marker (a touch off-centre, like a real spin).
+            const end = 600 - (WIN * W + 150) + 38;
+            const start = 600 - (3 * W + 150);
+            const winner = strip.children[WIN];
+            window.setProgress = (p) => {
+                p = Math.min(1, Math.max(0, p));
+                const ease = 1 - Math.pow(1 - p, 4);
+                strip.style.transform = `translateX(${start + (end - start) * ease}px)`;
+                winner.classList.toggle('win', p >= 1);
+            };
+            window.setProgress(Number(new URLSearchParams(location.search).get('p') ?? 1));
+        </script>
+    </body>
+</html>

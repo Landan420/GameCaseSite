@@ -1,0 +1,30 @@
+{
+  "component": {
+    "type": 17,
+    "accent_color": 14986809,
+    "components": [
+      {
+        "type": 12,
+        "items": [
+          {
+            "media": { "url": "https://spinagame.pages.dev/social/card.gif" },
+            "description": "A CS2-style case reel of Steam games spinning and landing on a gold ELDEN RING"
+          }
+        ]
+      },
+      {
+        "type": 10,
+        "content": "### Can't pick a game? Open the case.\nSpin your Steam library like a CS2 case, or spin with friends to land on a game you all own."
+      },
+      { "type": 14, "divider": false, "spacing": 1 },
+      {
+        "type": 1,
+        "components": [
+          { "type": 2, "style": 5, "label": "Sign in with Steam", "url": "https://spinagame.pages.dev/api/auth/login" },
+          { "type": 2, "style": 5, "label": "Try the demo", "url": "https://spinagame.pages.dev/?demo" },
+          { "type": 2, "style": 5, "label": "Open the site", "url": "https://spinagame.pages.dev/" }
+        ]
+      }
+    ]
+  }
+}

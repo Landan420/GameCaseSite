@@ -1,0 +1,3 @@
+# Copy to .dev.vars for `npm run dev:api`. Never commit the real file.
+STEAM_API_KEY=your-key-from-steamcommunity.com/dev/apikey
+SESSION_SECRET=any-long-random-string

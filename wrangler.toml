@@ -1,0 +1,8 @@
+name = "spinagame"
+compatibility_date = "2026-08-20"
+pages_build_output_dir = "dist"
+
+# No database. Two secrets, set with `wrangler pages secret put <NAME>` (and in
+# .dev.vars for local runs):
+#   STEAM_API_KEY   — https://steamcommunity.com/dev/apikey, reads owned games
+#   SESSION_SECRET  — any long random string, signs the login cookie
